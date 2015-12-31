@@ -8,9 +8,6 @@ RUN cd  /tmp   &&\
 
 RUN rm -rf /etc/my.cnf
 ADD ./my.cnf  /etc/my.cnf
-ADD ./mysql-init.sh  /usr/bin/mysql-init.sh
-RUN chmod +x /usr/bin/mysql-init.sh
-RUN /usr/bin/mysql-init.sh
 
 VOLUME /var/lib/mysql
 
@@ -26,8 +23,6 @@ RUN wget -q https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION
     rm apache-tomcat-*.tar.gz  && \
     mv apache-tomcat* "$CATALINA_HOME"
 
-
-# the web apps is located at /opt/tomcat/apache-tomcat-7.0.55/webapps
 
 # server.sh
 ADD ./server.sh  /server.sh
