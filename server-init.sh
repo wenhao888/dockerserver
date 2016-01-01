@@ -9,14 +9,15 @@ if [ ! -f "/var/lib/mysql/ibdata1" ]; then
 
 	sleep 3
 
-	mysql -u root -e " \
+  mysql -u root -e "create database cdnexus; "
+  mysql -u root  cdnexus </cdnexus.schema.sql
+
+  mysql -u root -e " \
   		SET PASSWORD = PASSWORD('mysql'); \
   		UPDATE mysql.user SET password = PASSWORD('mysql') WHERE user = 'root'; \
   		DELETE FROM mysql.user WHERE user = ''; \
   		GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY 'mysql' WITH GRANT OPTION; \
-  		GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%' IDENTIFIED BY 'repl'; \
-  		GRANT ALL ON *.* TO 'fabric'@'%' IDENTIFIED BY 'fabric'; \
-  		GRANT SELECT, SHOW DATABASES, SUPER, REPLICATION CLIENT, PROCESS ON *.* TO 'mem'@'%' IDENTIFIED BY 'mem'"
+  		GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%' IDENTIFIED BY 'repl'; "
 
 	/usr/bin/mysqladmin -u root -pmysql shutdown
 

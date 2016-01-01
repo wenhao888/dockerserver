@@ -7,7 +7,7 @@ RUN cd  /tmp   &&\
     yum install -y mysql55w mysql55w-server
 
 RUN rm -rf /etc/my.cnf
-ADD ./my.cnf  /etc/my.cnf
+ADD ./mysql/my.cnf  /etc/my.cnf
 
 VOLUME /var/lib/mysql
 
@@ -23,10 +23,15 @@ RUN wget -q https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION
     rm apache-tomcat-*.tar.gz  && \
     mv apache-tomcat* "$CATALINA_HOME"
 
+# add cdnexus schema
+ADD ./mysql/cdnexus.schema.sql   /cdnexus.schema.sql
 
-# server.sh
-ADD ./server.sh  /server.sh
-RUN chmod 777    /server.sh
+# add api server
+ADD ./apiserver/apiserver-1.0-dev-SNAPSHOT.war   ${CATALINA_HOME}/webapps/api.war
+
+# server-init.sh
+ADD ./server-init.sh  /server-init.sh
+RUN chmod 777    /server-init.sh
 
 EXPOSE 3306 8080
-CMD ["/server.sh"]
+CMD ["/server-init.sh"]
